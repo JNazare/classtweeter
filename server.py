@@ -2,12 +2,14 @@ from flask import Flask
 from flask import request
 import flask 
 import tweepy
+import keys
 app = Flask(__name__)
 
 #config
 	
-CONSUMER_TOKEN='vfcxnkpSjdGXMGeWASlTMD4ff'
-CONSUMER_SECRET='znNmKCrxC98wVagpyK9dgqBwfwgKj7FJlXam4jbc0oHROCILz3'
+keys = keys.getKeys()
+CONSUMER_TOKEN=keys[0]
+CONSUMER_SECRET=keys[1]
 CALLBACK_URL = 'http://1e91c63d.ngrok.com/verify'
 session = dict()
 db = dict() #you can save these values to a database
