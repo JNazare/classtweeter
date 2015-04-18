@@ -19,7 +19,6 @@ def send_token():
 	auth = tweepy.OAuthHandler(CONSUMER_TOKEN, 
 		CONSUMER_SECRET, 
 		CALLBACK_URL)
-	print auth
 	try: 
 		#get the request tokens
 		redirect_url= auth.get_authorization_url()
@@ -62,7 +61,7 @@ def start():
 	api = db['api']
 
 	#example, print your latest status posts
-	return flask.render_template('tweets.html', tweets=api.user_timeline())
+	return flask.render_template('classtweeter.html', tweets=api.user_timeline())
 
 if __name__ == "__main__":
 	app.run(debug=True)

@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+{% block sidebar %}
+
+  <p>
+    Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+  </p>
+  <button type="button" class="btn btn-default btn-sm">
+  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+  </button>
+  <p>
+    Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+  </p>
+  <button type="button" class="btn btn-default btn-sm">
+  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+  </button>
+  <p>
+    Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+  </p>
+  <button type="button" class="btn btn-default btn-sm">
+  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+  </button>
+  <p>
+    Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+  </p>
+  <button type="button" class="btn btn-default btn-sm">
+  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+  </button>
+  <div class="input-group" style="margin-top: 10px;">
+    <span class="input-group-addon" id="basic-addon2">@</span>
+    <input type="text" class="form-control" placeholder="Tweet" aria-describedby="basic-addon1">
+  </div>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+  {% for t in tweets %}
+  <div class="col-sm-4 col-md-4" style="background-color:lavenderblush; height: 200px; overflow: scroll;">
+    <p>
+      {{ t.text }}
+    </p>
+    <button type="button" class="btn btn-default btn-sm">
+    <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+    </button>
+    
+    <div class="input-group" style="margin-top: 10px;">
+      <span class="input-group-addon" id="basic-addon2">@</span>
+      <input type="text" class="form-control" placeholder="Tweet" aria-describedby="basic-addon1">
+    </div>
+  </div>
+  {% endfor %}
+
+{% endblock %}
