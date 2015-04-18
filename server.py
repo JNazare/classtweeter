@@ -1,9 +1,11 @@
-from flask import Flask
-from flask import request
+from flask import Flask, request, session, redirect, url_for
 import flask 
+from functools import wraps
 import tweepy
 import keys
+
 app = Flask(__name__)
+app.secret_key = 'medialab'
 
 #config
 	
@@ -11,11 +13,19 @@ keys = keys.getKeys()
 CONSUMER_TOKEN=keys[0]
 CONSUMER_SECRET=keys[1]
 CALLBACK_URL = 'http://1e91c63d.ngrok.com/verify'
-session = dict()
+# session = dict()
 db = dict() #you can save these values to a database
 
-@app.route("/")
-def send_token():
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session.get("request_token", None) is None:
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+@app.route("/login")
+def login():
 	auth = tweepy.OAuthHandler(CONSUMER_TOKEN, 
 		CONSUMER_SECRET, 
 		CALLBACK_URL)
@@ -23,6 +33,7 @@ def send_token():
 		#get the request tokens
 		redirect_url= auth.get_authorization_url()
 		session['request_token']= auth.request_token
+		print session['request_token']
 	except tweepy.TweepError:
 		print 'Error! Failed to get request token'
 	
@@ -36,8 +47,7 @@ def get_verification():
 	verifier= request.args['oauth_verifier']
 	
 	auth = tweepy.OAuthHandler(CONSUMER_TOKEN, CONSUMER_SECRET)
-	token = session['request_token']
-	del session['request_token']
+	token = session.get('request_token', None)
 	
 	auth.request_token = token
 
@@ -51,11 +61,19 @@ def get_verification():
 
 	#store in a db
 	db['api']=api
-	db['access_token']=auth.access_token
-	db['access_token_secret']=auth.access_token_secret
+	db['access_token']=session.get('request_token', None)["oauth_token"]
+	db['access_token_secret']=session.get('request_token', None)["oauth_token_secret"]
+
 	return flask.redirect(flask.url_for('start'))
 
-@app.route("/start")
+@app.route("/logout")
+@login_required
+def logout():
+	session.clear()
+	return flask.redirect(flask.url_for('login'))
+
+@app.route("/")
+@login_required
 def start():
 	#auth done, app logic can begin
 	api = db['api']
