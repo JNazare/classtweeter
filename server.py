@@ -1,15 +1,3 @@
-'''
-flask-tweepy-oauth
-
-an example showing how to authorize a twitter application
-in python with flask and tweepy.
-
-find me on github at github.com/whichlight
-see my other projects at whichlight.com
-
-KAWAN!
-'''
-
 from flask import Flask
 from flask import request
 import flask 
