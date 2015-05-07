@@ -1,20 +1,92 @@
-from flask import Flask, request, session, redirect, url_for
+from flask import Flask, request, session, redirect, url_for, jsonify
 import flask 
 from functools import wraps
 import tweepy
 import keys
+from operator import itemgetter
+
+class listener(tweepy.StreamListener):
+
+    def on_status(self, status):
+        print 'Tweet text: ' + status.text
+
+        for hashtag in status.entries['hashtags']:
+            print hashtag['text']
+
+        return True
+
+    def on_data(self, data):
+        print data
+        return True
+
+    def on_error(self, status):
+        print status
+
+def getAPIObject():
+	auth = tweepy.OAuthHandler(CONSUMER_TOKEN, CONSUMER_SECRET)
+	token = session.get('request_token', None)
+	
+	auth.request_token = token
+
+	try:
+		    auth.get_access_token(session['verifier'])
+	except tweepy.TweepError:
+		    print 'Error! Failed to get access token.'
+	
+	#now you have access!
+	api = tweepy.API(auth)
+	return api
+
+def getStreamObject():
+	auth = tweepy.OAuthHandler(CONSUMER_TOKEN, CONSUMER_SECRET)
+	auth.set_access_token(MY_ACCESS_TOKEN, MY_ACCESS_SECRET)
+	twitterStream = tweepy.Stream(auth, listener())
+	return twitterStream
+
+def groupnameToHashtag(name):
+	return "#" + name.replace(" ", "-")
+
+def hashtagToGroupname(hashtag):
+	return hashtag.replace("-", " ")[1:]
+
+def tweetAsUser(API, text):
+	return API.update_status(status=text)
+
+def getUserInfo(API, username):
+	return API.get_user(username)
+
+def getListofUsersInfo(API, usernames):
+	allUserInfo = []
+	for username in usernames:
+		userInfo = getUserInfo(API, username)
+		allUserInfo.append(userInfo)
+	return allUserInfo
+
+def getHashtag(twitterStream, hashtag):
+	return twitterStream.filter(track=[hashtag])
+
+def getTweetsWithAllHashtags(twitterStream, hashtags):
+	concatHashtag = ' '.join(hashtags).strip()
+	return concatHashtag
+
+def sortTweets(tweets, sort_by='time'):
+	if sort_by == 'time':
+		return sorted(tweets, key=itemgetter('created_at')) 
+	if sort_by == 'favorites':
+		return sorted(tweets, key=itemgetter('favorite_count')) 
+	return None
 
 app = Flask(__name__)
 app.secret_key = 'medialab'
-
-#config
 	
 keys = keys.getKeys()
 CONSUMER_TOKEN=keys[0]
 CONSUMER_SECRET=keys[1]
-CALLBACK_URL = 'http://1e91c63d.ngrok.com/verify'
+MY_ACCESS_TOKEN=keys[2]
+MY_ACCESS_SECRET=keys[3]
+CALLBACK_URL = 'http://localhost:5000/verify'
 # session = dict()
-db = dict() #you can save these values to a database
+ #you can save these values to a database
 
 def login_required(f):
     @wraps(f)
@@ -26,6 +98,8 @@ def login_required(f):
 
 @app.route("/login")
 def login():
+
+	session['db'] = dict()
 	auth = tweepy.OAuthHandler(CONSUMER_TOKEN, 
 		CONSUMER_SECRET, 
 		CALLBACK_URL)
@@ -44,25 +118,12 @@ def login():
 def get_verification():
 	
 	#get the verifier key from the request url
-	verifier= request.args['oauth_verifier']
+	session['verifier'] = request.args['oauth_verifier']
 	
-	auth = tweepy.OAuthHandler(CONSUMER_TOKEN, CONSUMER_SECRET)
-	token = session.get('request_token', None)
-	
-	auth.request_token = token
+	api = getAPIObject()
 
-	try:
-		    auth.get_access_token(verifier)
-	except tweepy.TweepError:
-		    print 'Error! Failed to get access token.'
-	
-	#now you have access!
-	api = tweepy.API(auth)
-
-	#store in a db
-	db['api']=api
-	db['access_token']=session.get('request_token', None)
-	print db['access_token']
+	session['access_token']=session.get('request_token', None)
+	print session['access_token']
 
 	return flask.redirect(flask.url_for('start'))
 
@@ -76,8 +137,11 @@ def logout():
 @login_required
 def start():
 	#auth done, app logic can begin
-	api = db['api']
-
+	api = getAPIObject()
+	# print getListofUsersInfo(api, ['norders', 'zmh'])
+	streamer = getStreamObject()
+	# print getTweetsWithAllHashtags(streamer, ['test', 'ing', 'this'])
+	# print getHashtag(streamer, 'Juliana')
 	#example, print your latest status posts
 	return flask.render_template('classtweeter.html', tweets=api.user_timeline())
 
