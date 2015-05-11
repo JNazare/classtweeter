@@ -110,18 +110,26 @@ def organizeTweets(tweets):
         hashtagArray.sort()
         hashtagString = " ".join(hashtagArray)
         tweet["created_at"] = to_datetime(tweet["created_at"])
-        tweet["_id"] = str(tweet["_id"] )
+        tweet["_id"] = str(tweet["_id"])
         for hashtag in hashtagArray:
             tweet["text"] = tweet["text"].replace("#"+hashtag, "")
         tweet["text"]=tweet["text"].replace("#"+tracked_hashtag, "")
+        if "?" in tweet["text"]:
+            tweet["is_question"]=True
+        is_author=False
+        if tweet["user_id"]==session["id_str"]:
+            is_author=True
         if organizedHashtags.get(hashtagString, None) != None:
             organizedHashtags[hashtagString]["tweets"].append(tweet)
             organizedHashtags[hashtagString]["user_photos"].append(tweet["user_profile_image_url"])
             organizedHashtags[hashtagString]["total_favorites"]=organizedHashtags[hashtagString]["total_favorites"] + int(tweet["favorite_count"])
+            if organizedHashtags[hashtagString]["is_author"] == False and is_author==True:
+                organizedHashtags[hashtagString]["is_author"] = True
         else:
             organizedHashtags[hashtagString] = {"tweets": [tweet], "user_photos": 
                                                 [tweet["user_profile_image_url"]], 
-                                                "total_favorites": int(tweet["favorite_count"])}
+                                                "total_favorites": int(tweet["favorite_count"]),
+                                                "is_author": is_author}
         organizedHashtags[hashtagString]["user_photos"]=list(set(organizedHashtags[hashtagString]["user_photos"]))
         organizedHashtags[hashtagString]["tweets"].sort(key=lambda x: x["created_at"], reverse=True)
         organizedHashtags[hashtagString]["most_recent"]=organizedHashtags[hashtagString]["tweets"][0]["created_at"]
@@ -151,6 +159,8 @@ def groupnameToHashtag(name):
 @app.template_filter('hashtagToGroupname')
 def hashtagToGroupname(hashtag):
     return hashtag.replace("_", " ")
+
+
 
 def login_required(f):
     @wraps(f)
@@ -219,10 +229,10 @@ def contentsOfHashtag():
 @login_required
 def start():
     #auth done, app logic can begin
-    # api = getAPIObject()
+    api = getAPIObject()
+    session["id_str"] = api.me().id
     #example, print your latest status posts
     tweets = loads(stream())
-    # print tweets
     return flask.render_template('classtweeter.html', groups=tweets)
 
 
