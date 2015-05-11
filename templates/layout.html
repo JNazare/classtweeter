@@ -15,11 +15,22 @@
   <body>
     {% include 'header.html' %}
     <div class="container-fluid">
-      <div class="col-sm-4 col-md-3" style="background-color:lavenderblush; margin-top: 10px; height: 100%;">
+      <div class="col-sm-4 col-md-4" style="background-color:lavenderblush; margin-top: 0px; padding-right: 15px;
+                padding-left: 15px;
+                padding-top: 15px;
+                padding-bottom: 15px;
+                border-radius:0px;
+                /*outline: 2px solid #ccc;*/
+                margin-right: 5px;
+                margin-left: 0px;
+                margin-top: 0px;
+                margin-bottom: 0px;
+                height:80vh;
+                overflow:scroll;">
         {% block sidebar %}{% endblock %}
       </div>
       
-      <div class="col-sm-4 col-md-9" style= "margin-top: 0px; margin-left: 5px; ">
+      <div class="col-sm-4 col-md-8" style= "margin-top: 0px; margin-left: 5px; ">
         {% block content %}{% endblock %}
       </div>
       

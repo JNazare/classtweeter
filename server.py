@@ -89,7 +89,6 @@ def sortTweets(tweets, sort_by='time'):
     return None
 
 def organizeTweets(tweets):
-    print type(tweets)
     organizedHashtags = {}
     for tweet in tweets:
         hashtagArray= tweet.get("hashtags", None)
@@ -156,14 +155,6 @@ def logout():
     session.clear()
     return flask.redirect(flask.url_for('login'))
 
-@app.route("/")
-@login_required
-def start():
-    #auth done, app logic can begin
-    api = getAPIObject()
-    #example, print your latest status posts
-    return flask.render_template('classtweeter.html', tweets=api.user_timeline())
-
 @app.route('/stream')
 @login_required
 def stream():
@@ -171,6 +162,16 @@ def stream():
     tweets = dumps(list(handle.collected_tweets.find()))
     organizedTweets = organizeTweets(loads(tweets))
     return organizedTweets
+
+@app.route("/")
+@login_required
+def start():
+    #auth done, app logic can begin
+    # api = getAPIObject()
+    #example, print your latest status posts
+    tweets = loads(stream())
+    return flask.render_template('classtweeter.html', tweets=tweets)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
