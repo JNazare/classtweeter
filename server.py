@@ -9,6 +9,16 @@ from bson import json_util
 from bson.json_util import dumps
 from bson.json_util import loads
 import json
+import re
+from datetime import datetime, timedelta
+from email.utils import parsedate_tz
+
+tracked_hashtag = 'classtweeter'
+
+def to_datetime(datestring):
+    time_tuple = parsedate_tz(datestring.strip())
+    dt = datetime(*time_tuple[:6])
+    return dt - timedelta(seconds=time_tuple[-1])
 
 def connect():
     mongo_keys = keys.mongoKeys()
@@ -34,6 +44,16 @@ class listener(tweepy.StreamListener):
         # print 'error'
         return False
 
+
+def underscore_to_camelcase(value):
+    def camelcase(): 
+        yield str.lower
+        while True:
+            yield str.capitalize
+
+    c = camelcase()
+    return "".join(c.next()(x) if x else '_' for x in value.split("_"))
+
 def getAPIObject():
     auth = tweepy.OAuthHandler(CONSUMER_TOKEN, CONSUMER_SECRET)
     token = session.get('request_token', None)
@@ -54,12 +74,6 @@ def getStreamObject():
     auth.set_access_token(MY_ACCESS_TOKEN, MY_ACCESS_SECRET)
     twitterStream = tweepy.Stream(auth, listener())
     return twitterStream
-
-def groupnameToHashtag(name):
-    return "#" + name.replace(" ", "-")
-
-def hashtagToGroupname(hashtag):
-    return hashtag.replace("-", " ")[1:]
 
 def tweetAsUser(API, text):
     return API.update_status(status=text)
@@ -92,13 +106,30 @@ def organizeTweets(tweets):
     organizedHashtags = {}
     for tweet in tweets:
         hashtagArray= tweet.get("hashtags", None)
+        hashtagArray.remove(tracked_hashtag)
         hashtagArray.sort()
         hashtagString = " ".join(hashtagArray)
+        tweet["created_at"] = to_datetime(tweet["created_at"])
+        for hashtag in hashtagArray:
+            tweet["text"] = tweet["text"].replace("#"+hashtag, "")
+        tweet["text"]=tweet["text"].replace("#"+tracked_hashtag, "")
         if organizedHashtags.get(hashtagString, None) != None:
-            organizedHashtags[hashtagString].append(tweet)
+            organizedHashtags[hashtagString]["tweets"].append(tweet)
+            organizedHashtags[hashtagString]["user_photos"].append(tweet["user_profile_image_url"])
+            organizedHashtags[hashtagString]["total_favorites"]=organizedHashtags[hashtagString]["total_favorites"] + int(tweet["favorite_count"])
         else:
-            organizedHashtags[hashtagString] = [tweet]
-    return dumps(organizedHashtags)
+            organizedHashtags[hashtagString] = {"tweets": [tweet], "user_photos": 
+                                                [tweet["user_profile_image_url"]], 
+                                                "total_favorites": int(tweet["favorite_count"])}
+        organizedHashtags[hashtagString]["user_photos"]=list(set(organizedHashtags[hashtagString]["user_photos"]))
+        organizedHashtags[hashtagString]["tweets"].sort(key=lambda x: x["created_at"], reverse=True)
+        organizedHashtags[hashtagString]["most_recent"]=organizedHashtags[hashtagString]["tweets"][0]["created_at"]
+    hashtagList = []
+    for hashtag in organizedHashtags:
+        organizedHashtags[hashtag]["hashtagString"]=hashtag
+        hashtagList.append(organizedHashtags[hashtag])
+    hashtagList.sort(key=lambda x: x["most_recent"], reverse=True)
+    return dumps(hashtagList)
 
 
 app = Flask(__name__)
@@ -112,6 +143,13 @@ MY_ACCESS_SECRET=twitterKeys[3]
 CALLBACK_URL = 'http://localhost:5000/verify'
 # session = dict()
  #you can save these values to a database
+
+def groupnameToHashtag(name):
+    return "#" + name.replace(" ", "_")
+
+@app.template_filter('hashtagToGroupname')
+def hashtagToGroupname(hashtag):
+    return hashtag.replace("_", " ")
 
 def login_required(f):
     @wraps(f)
@@ -170,7 +208,8 @@ def start():
     # api = getAPIObject()
     #example, print your latest status posts
     tweets = loads(stream())
-    return flask.render_template('classtweeter.html', tweets=tweets)
+    # print tweets
+    return flask.render_template('classtweeter.html', groups=tweets)
 
 
 if __name__ == "__main__":

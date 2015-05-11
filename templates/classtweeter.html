@@ -44,16 +44,15 @@
       <input type="text" class="form-control" placeholder="Name your new group!" aria-describedby="basic-addon1">
     </div>
   </div>
-  {% for group in tweets %}
+  {% for group in groups %}
     <div class="col-sm-4 col-md-4" style="background-color:lavenderblush; height: 200px; overflow: scroll;">
-      <img src="../static/images/profile_picture.png" class="img-circle" style="height:30px; width:30px; float:right; margin-top: -5px; margin-right: 2px;
-      margin-left: 2px;" alt="Circular Image">
-      <img src="../static/images/profile_picture.png" class="img-circle" style="height:30px; width:30px; float:right; margin-top: -5px; margin-right: 2px;
-      margin-left: 2px;" alt="Circular Image">
-      <img src="../static/images/profile_picture.png" class="img-circle" style="height:30px; width:30px; float:right; margin-top: -5px; margin-right: 2px;
-      margin-left: 2px;" alt="Circular Image">
+      <strong> {{group.hashtagString | hashtagToGroupname | capitalize}} </strong>
+      {% for avatar in group.user_photos %}
+        <img src="../static/images/profile_picture.png" class="img-circle" style="height:30px; width:30px; float:right; margin-top: -5px; margin-right: 2px;
+        margin-left: 2px;" alt="Circular Image">
+      {% endfor %}
       <p>
-        {{ tweets[group][0].text }}
+        {{ group.tweets[0].text }}
       </p>
     </div>
   {% endfor %}
