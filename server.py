@@ -110,6 +110,7 @@ def organizeTweets(tweets):
         hashtagArray.sort()
         hashtagString = " ".join(hashtagArray)
         tweet["created_at"] = to_datetime(tweet["created_at"])
+        tweet["_id"] = str(tweet["_id"] )
         for hashtag in hashtagArray:
             tweet["text"] = tweet["text"].replace("#"+hashtag, "")
         tweet["text"]=tweet["text"].replace("#"+tracked_hashtag, "")
@@ -129,7 +130,7 @@ def organizeTweets(tweets):
         organizedHashtags[hashtag]["hashtagString"]=hashtag
         hashtagList.append(organizedHashtags[hashtag])
     hashtagList.sort(key=lambda x: x["most_recent"], reverse=True)
-    return dumps(hashtagList)
+    return [dumps(hashtagList), dumps(organizedHashtags)]
 
 
 app = Flask(__name__)
@@ -195,11 +196,24 @@ def logout():
 
 @app.route('/stream')
 @login_required
-def stream():
+def stream(type='list'):
     handle = connect()
     tweets = dumps(list(handle.collected_tweets.find()))
     organizedTweets = organizeTweets(loads(tweets))
-    return organizedTweets
+    if type=='list':
+        return organizedTweets[0]
+    if type=='dict':
+        print organizedTweets[1]
+        return organizedTweets[1]
+
+@app.route('/contentsOfHashtag', methods=['POST'])
+@login_required
+def contentsOfHashtag():
+    hashtag = request.form["hashtag"]
+    tweets = loads(stream(type='dict'))
+    hashtagContents = tweets[hashtag]
+    hashtagContents["groupName"]=hashtagToGroupname(hashtag).title()
+    return jsonify(hashtagContents)
 
 @app.route("/")
 @login_required
