@@ -1,49 +1,26 @@
-body {
-    font-family: 'Georgia', serif;
-    font-size: 16px;
-    margin: 30px;
-    padding: 0;
+body{
+    background-color: #f5f8fa;
 }
 
-img {
-    border: none;
+span.group-name{
+    line-height: 30px;
 }
 
-a {
-    color: #335E79;
+.round-button {
+    display:block;
+    width:50px;
+    height:50px;
+    line-height:38px;
+    border: 2px solid #f5f5f5;
+    border-radius: 50%;
+    color:#f5f5f5;
+    text-align:center;
+    text-decoration:none;
+    background: #464646;
+    box-shadow: 0 0 3px gray;
+    font-size:40px;
+    font-weight:bold;
 }
-
-p.message {
-    color: #335E79;
-    padding: 10px;
-    background: #CADEEB;
-}
-
-p.error {
-    color: #783232;
-    padding: 10px;
-    background: #EBCACA;
-}
-
-input {
-    font-family: 'Georgia', serif;
-    font-size: 16px;
-    border: 1px solid black;
-    color: #335E79;
-    padding: 2px;
-}
-
-input[type="submit"] {
-    background: #CADEEB;
-    color: #335E79;
-    border-color: #335E79;
-}
-
-input[name="openid"] {
-    background: url(openid.png) 4px no-repeat;
-    padding-left: 24px;
-}
-
-h1, h2 {
-    font-weight: normal;
+.round-button:hover {
+    background: #262626;
 }

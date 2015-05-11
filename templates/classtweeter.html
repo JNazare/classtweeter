@@ -25,28 +25,15 @@
   <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
   
   <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-  <nav class="navbar navbar-default navbar-fixed-bottom" style="height: 22vh; width: 30.8vw; background-color:white; margin-left:15px;">
-    <div class="container">
-      
-      <textarea class="form-control" style="height: 22vh; width: 30.8vw; background-color:white; margin-left:-15px;">Add to the conversation here...</textarea>
-      
-    </div>
+  <nav class="navbar navbar-default navbar-fixed-bottom" style="float: left; height: 22vh; background-color:transparent; border: none; margin-left:15px;">
+    <a style="float:right; margin-top: 10vh; margin-right: 5vh;" href="#" class="round-button">+</a>
+      <textarea class="form-control" style="height: 22vh; width: 30.8vw; background-color:white;">Add to the conversation here...</textarea>
   </nav>
 {% endblock %}
 {% block content %}
-  <div class="col-sm-4 col-md-4 " style="background-color:lavenderblush; height: 200px; overflow: scroll;">
-    <button type="button" class="btn btn-default btn-lg" style="margin-left: 45px; width: 130px; height: 130px; background-color:#bde3d8;font-size: 40px;">
-    <span class="glyphicon glyphicon-plus" style = aria-hidden="true">    </span>
-    </button>
-    
-    <div class="input-group" style="margin-top: 10px;">
-      <span class="input-group-addon" id="basic-addon2">#</span>
-      <input type="text" class="form-control" placeholder="Name your new group!" aria-describedby="basic-addon1">
-    </div>
-  </div>
   {% for group in groups %}
-    <div class="col-sm-4 col-md-4" style="background-color:lavenderblush; height: 200px; overflow: scroll;">
-      <strong> {{group.hashtagString | hashtagToGroupname | capitalize}} </strong>
+    <div class="col-sm-4 col-md-4" style="background-color:#fff; height: 200px; overflow: scroll; margin-bottom: 15px;">
+      <span class="group-name"> <strong> {{group.hashtagString | hashtagToGroupname | capitalize}} </strong> </span>
       {% for avatar in group.user_photos %}
         <img src="../static/images/profile_picture.png" class="img-circle" style="height:30px; width:30px; float:right; margin-top: -5px; margin-right: 2px;
         margin-left: 2px;" alt="Circular Image">
