@@ -7,7 +7,6 @@ $( document ).ready(function() {
 	$(".thought-tile").click(function(){
 		hashtag = $(this).attr('id');
 		$.post( "/contentsOfHashtag", {"hashtag": hashtag}, function(data){
-			console.log(data);
 			$('#focused-group-name').text(data.groupName);
 			html_string=""
 			for(i=0; i< data.tweets.length; i++){

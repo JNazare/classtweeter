@@ -1,29 +1,30 @@
 {% extends "layout.html" %}
 {% block sidebar %}
-  <strong><span id="focused-group-name">TESTING</span></strong>
+  <strong><span id="focused-group-name">{{groups[0].hashtagString | hashtagToGroupname | capitalize}}</span></strong>
+  {% if groups[0].user_photos | length > 3 %}
   <button style="float:right; margin-top: -5px; margin-right: 2px;
   margin-left: 2px;" type="button" class="btn btn-default btn-circle"><i class="glyphicon"></i>
-    <span id="focused-more-avatars">4+</span></button>
+    <span id="focused-more-avatars">{{groups[0].user_photos | length - 3}}</span>
+  </button>
+  {% endif %}
   <span id="focused-group-avatars">
-  <img src="../static/images/profile_picture.png" class="img-circle" style="height:30px; width:30px; float:right; margin-top: -5px; margin-right: 2px;
-  margin-left: 2px;" alt="Circular Image">
+  {% if groups[0].user_photos | length <= 3 %}
+    {% for avatar in groups[0].user_photos %}
+      <img src="{{avatar}}" class="img-circle" style="height:30px; width:30px; float:right; margin-top: -5px; margin-right: 2px;
+      margin-left: 2px;" alt="Circular Image">
+    {% endfor %}
+  {% else %}
+    {% for avatar in groups[0].user_photos[:3] %}
+      <img src="{{avatar}}" class="img-circle" style="height:30px; width:30px; float:right; margin-top: -5px; margin-right: 2px;
+      margin-left: 2px;" alt="Circular Image">
+    {% endfor %}
+  {% endif %}
   </span>
   <br></br>
   <span id="focused-group-tweets">
-  <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-  
-  <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-  
-  <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-  
-  <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-  <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-  
-  <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-  
-  <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-  
-  <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+    {% for tweet in groups[0].tweets %}
+      <p>{{tweet.text}}</p>
+    {% endfor %}
   </span>
   <nav class="navbar navbar-default navbar-fixed-bottom" style="float: left; height: 22vh; background-color:transparent; border: none; margin-left:15px;">
     <a style="float:right; margin-top: 10vh; margin-right: 5vh;" href="#" class="round-button">+</a>
@@ -41,7 +42,9 @@
       <p style="margin-bottom: 20px;">
         {{ group.tweets[0].text }}
       </p>
-      <span style="position: absolute; bottom: 0;"> <p> <a href="#"> {{group.tweets | length - 1}} more in this thread </a> </p> </span>
+      {% if group.tweets | length - 1 > 0 %}
+        <span style="position: absolute; bottom: 0;"> <p> <a href="#"> {{group.tweets | length - 1}} more in this thread </a> </p> </span>
+      {% endif %}
     </div>
   {% endfor %}
 {% endblock %}
