@@ -109,7 +109,7 @@ def organizeTweets(tweets):
         hashtagArray.remove(tracked_hashtag)
         hashtagArray.sort()
         hashtagString = " ".join(hashtagArray)
-        tweet["created_at"] = to_datetime(tweet["created_at"])
+        tweet["created_at"] = to_datetime(tweet["created_at"]) - timedelta(hours=4)
         tweet["_id"] = str(tweet["_id"])
         for hashtag in hashtagArray:
             tweet["text"] = tweet["text"].replace("#"+hashtag, "")

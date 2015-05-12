@@ -130,10 +130,11 @@ $( document ).ready(function() {
 			composed_tweet = text + additional_hashtags;
 			$.post( "/sendToTwitter", composed_tweet, function(data){
 				$('#tweet-textarea').val("");
-				$("#sent-alert").show();
+				$("#send-tweet-button").removeClass("btn-unsent").addClass("btn-sent");
+				$("#send-tweet-button").text("SENT!");
 				$("#new-thread-form-group").removeClass("has-error");
 				$("#new-thread-control-label").text("New Thread Name");
-				setTimeout(function() { $("#sent-alert").hide(); }, 3000)
+				setTimeout(function() { $("#send-tweet-button").removeClass("btn-sent").addClass("btn-unsent"); $("#send-tweet-button").text("Send");}, 3000)
 			})
 		}
 		else{

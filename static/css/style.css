@@ -38,3 +38,11 @@ span.group-name{
 .thought-tile-selected{
     border: 1px solid #4099FF;
 }
+
+.btn-unsent{
+    background-color:#4099FF;
+}
+
+.btn-sent{
+    background-color: green;
+}
