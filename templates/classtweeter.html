@@ -1,5 +1,7 @@
 {% extends "layout.html" %}
+
 {% block sidebar %}
+  <span id="focusThread">
   <strong><span id="focused-group-name">{{groups[0].hashtagString | hashtagToGroupname | capitalize}}</span></strong>
   {% if groups[0].user_photos | length > 3 %}
     <button style="float:right; margin-top: -5px; margin-right: 2px;
@@ -32,11 +34,21 @@
       </p>
     {% endfor %}
   </span>
+  </span>
+  <span id="newThread" style="display:none;">
+    <div class="input-group new-group-form">
+      <span class="input-group-addon" id="basic-addon1">#</span>
+      <input type="text" class="form-control" placeholder="New group name" aria-describedby="basic-addon1">
+    </div>
+  </span>
   <nav class="navbar navbar-default navbar-fixed-bottom" style="float: left; height: 22vh; background-color:transparent; border: none; margin-left:15px;">
-    <a style="float:right; margin-top: 10vh; margin-right: 5vh;" href="#" class="round-button">+</a>
+    <a style="float:right; margin-top: 10vh; margin-right: 5vh;" class="round-button" id="new-thread-button">+</a>
     <textarea class="form-control" style="height: 22vh; width: 30.8vw; background-color:white;">Add to the conversation here...</textarea>
   </nav>
+
+
 {% endblock %}
+
 {% block content %}
   <span id="allTweets">
   {% include 'tweettile.html' %}

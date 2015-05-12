@@ -181,7 +181,7 @@ def login():
         #get the request tokens
         redirect_url= auth.get_authorization_url()
         session['request_token']= auth.request_token
-        print session['request_token']
+        # print session['request_token']
     except tweepy.TweepError:
         print 'Error! Failed to get request token'
     
@@ -213,7 +213,7 @@ def stream(type='list'):
     if type=='list':
         return organizedTweets[0]
     if type=='dict':
-        print organizedTweets[1]
+        # print organizedTweets[1]
         return organizedTweets[1]
 
 @app.route('/contentsOfHashtag', methods=['POST'])
