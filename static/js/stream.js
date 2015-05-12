@@ -93,6 +93,9 @@ $( document ).ready(function() {
 	$("#send-tweet-button").click(function(){
 		text = $('#tweet-textarea').val();
 		additional_hashtags = $("#hashtag_to_add").val()
+		if ($("#new-group-name").is(':visible')==true) {
+			additional_hashtags = " #" + $("#new-group-name").val().toLowerCase().replace(" ", "_") + " #classtweeter";
+		}
 		composed_tweet = text + additional_hashtags;
 		$.post( "/sendToTwitter", composed_tweet, function(data){
 			$('#tweet-textarea').val("");

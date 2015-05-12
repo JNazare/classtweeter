@@ -117,7 +117,7 @@ def organizeTweets(tweets):
         if "?" in tweet["text"]:
             tweet["is_question"]=True
         is_author=False
-        if tweet["user_id"]==session["id_str"]:
+        if int(tweet["user_id"])==session["id_str"]:
             is_author=True
         if organizedHashtags.get(hashtagString, None) != None:
             organizedHashtags[hashtagString]["tweets"].append(tweet)
