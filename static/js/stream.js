@@ -47,11 +47,15 @@ function focusThread(hashtag){
 			$("#focusThread").toggle();
 			$("#newThread").toggle();
 		}
+		focused_thread = hashtag
 	})
 }
 
 $( document ).ready(function() {
-	show_only_my_tweets = false
+	show_only_my_tweets = false;
+	focused_thread = $(".thought-tile:first").attr('id');
+	new_thread = false;
+	$("#"+focused_thread).addClass("thought-tile-selected")
 	window.setInterval(function(){
 		$.get( "/stream", function( data ) {
 			data = $.parseJSON(data);
@@ -62,10 +66,18 @@ $( document ).ready(function() {
 			  data: JSON.stringify(data)
 			}).done(function(tweet_html){
 				$("#allTweets").html(tweet_html);
+				if(new_thread == false){
+					$("#"+focused_thread).addClass("thought-tile-selected");
+					focusThread(focused_thread);
+				}
 				if(show_only_my_tweets==true){
 					showOnlyMyTweets();
 				}
 				$(".thought-tile").click(function(){
+					$(".thought-tile").each(function(index){
+						$(this).removeClass("thought-tile-selected")
+					})
+					$(this).addClass("thought-tile-selected");
 					hashtag = $(this).attr('id');
 					focusThread(hashtag);
 				});
@@ -75,6 +87,10 @@ $( document ).ready(function() {
 	}, 5000);
 
 	$(".thought-tile").click(function(){
+		$(".thought-tile").each(function(index){
+			$(this).removeClass("thought-tile-selected")
+		})
+		$(this).addClass("thought-tile-selected");
 		hashtag = $(this).attr('id');
 		focusThread(hashtag);
 	});
@@ -88,6 +104,12 @@ $( document ).ready(function() {
 	$("#new-thread-button").click(function(){
 		$("#focusThread").toggle();
 		$("#newThread").toggle();
+		if ($("#new-group-name").is(':visible')==true) {
+			new_thread = true;
+		}
+		else{
+			new_thread = false;
+		}
 	});
 	$('#tweet-textarea').bind('input propertychange', function() {
 		numCharsTotal = parseInt($('#charsTotal').text())
@@ -96,15 +118,24 @@ $( document ).ready(function() {
 	})
 	$("#send-tweet-button").click(function(){
 		text = $('#tweet-textarea').val();
-		additional_hashtags = $("#hashtag_to_add").val()
-		if ($("#new-group-name").is(':visible')==true) {
-			additional_hashtags = " #" + $("#new-group-name").val().toLowerCase().replace(" ", "_") + " #classtweeter";
+		if (text.length > 0){
+			additional_hashtags = $("#hashtag_to_add").val()
+			if ($("#new-group-name").is(':visible')==true) {
+				additional_hashtags = " #" + $("#new-group-name").val().toLowerCase().replace(" ", "_") + " #classtweeter";
+			}
+			composed_tweet = text + additional_hashtags;
+			$.post( "/sendToTwitter", composed_tweet, function(data){
+				$('#tweet-textarea').val("");
+				$("#sent-alert").show();
+				$("#new-thread-form-group").removeClass("has-error");
+				$("#new-thread-control-label").text("New Thread Name");
+				setTimeout(function() { $("#sent-alert").hide(); }, 3000)
+			})
 		}
-		composed_tweet = text + additional_hashtags;
-		$.post( "/sendToTwitter", composed_tweet, function(data){
-			$('#tweet-textarea').val("");
-			$("#sent-alert").show();
-			setTimeout(function() { $("#sent-alert").hide(); }, 3000)
-		})
+		else{
+			$("#new-thread-form-group").addClass("has-error");
+			$("#new-thread-control-label").text("You must name the thread...");
+		}
+		
 	})
 });

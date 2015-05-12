@@ -23,4 +23,18 @@ span.group-name{
 }
 .round-button:hover {
     background: #262626;
+    text-decoration: none;
+    color: #4099FF;
+    border-color: #4099FF;
+}
+
+.round-button:active {
+    background: #262626;
+    text-decoration: none;
+    color: #4099FF;
+    border-color: #4099FF;
+}
+
+.thought-tile-selected{
+    border: 1px solid #4099FF;
 }

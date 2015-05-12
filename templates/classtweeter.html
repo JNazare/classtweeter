@@ -36,15 +36,16 @@
   </span>
   </span>
   <span id="newThread" style="display:none;">
-    <div class="form-group">
-      <input id="new-group-name" type="text" class="form-control" placeholder="Add new group name" aria-describedby="basic-addon1">
+    <div id="new-thread-form-group" class="form-group">
+      <label id="new-thread-control-label" class="control-label" for="inputSuccess1">New Thread Name</label>
+      <input id="new-group-name" type="text" class="form-control" placeholder="Group 1" aria-describedby="basic-addon1">
     </div>
   </span>
   <div id="sent-alert" style="position: absolute; bottom: 20px; text-align: center; color: green; display:none;"><strong>Sent!</strong></div>
   <nav class="navbar navbar-default navbar-fixed-bottom" style="float: left; height: 22vh; background-color:transparent; border: none; margin-left:15px;">
     <a style="float:right; margin-top: 10vh; margin-right: 5vh;" class="round-button" id="new-thread-button">+</a>
-    <div style="height: 22vh; width: 30.8vw; background-color:white;">
-      <textarea id="tweet-textarea" style="height: 15vh; border-radius: 0px;" class="form-control" placeholder="Add to the conversation here..." maxlength="{{140 - hashtag_to_send | length}}"></textarea>
+    <div style="height: 22vh; width: 30.59vw; background-color:white; border-right: 1px solid #4099FF; border-left: 1px solid #4099FF;">
+      <textarea id="tweet-textarea" style="height: 15vh; border-radius: 0px; border-left: 0px; border-right: 0px;" class="form-control" placeholder="Add to the conversation here..." maxlength="{{140 - hashtag_to_send | length}}"></textarea>
       <button id="send-tweet-button" class="btn btn-primary" style="background-color:#4099FF; margin-top:5px; float:right; border: 0px; border-radius: 0px;"> Send </button>
       <span style="float: right; margin-right: 10px; margin-top: 10px;"><span id="charsLeft">{{140 - hashtag_to_send | length}}</span> / <span id="charsTotal">{{140 - hashtag_to_send | length}} </span> </span>
       <input id="hashtag_to_add" type="hidden" value="{{hashtag_to_send}}">
