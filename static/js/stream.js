@@ -20,9 +20,9 @@ function focusThread(hashtag){
 		$('#focused-group-name').text(data.groupName);
 		html_string=""
 		for(i=data.tweets.length-1; i>-1; i--){
-			tweet_html = "<span>" + data.tweets[i].created_at + "</span>&nbsp;&nbsp;" + data.tweets[i].text;
+			tweet_html = "<span>" + data.tweets[i].created_at_str + "</span>&nbsp;&nbsp;" + data.tweets[i].text;
 			if(data.tweets[i].is_question){
-				tweet_html =  '<span style="background-color: #E0F8E0">' + "<span>" + data.tweets[i].created_at + "</span>&nbsp;&nbsp;" + data.tweets[i].text  + '</span>'
+				tweet_html =  '<span style="background-color: #E0F8E0">' + "<span>" + data.tweets[i].created_at_str + "</span>&nbsp;&nbsp;" + data.tweets[i].text  + '</span>'
 			}
 			html_string = html_string + "<p>" + tweet_html +"</p>"
 		}

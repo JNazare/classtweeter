@@ -27,9 +27,9 @@
     <p>
       {% for tweet in groups[0].tweets %}
         {% if tweet.is_question %}
-          <span style="background-color: #E0F8E0"><span> {{tweet.created_at}}&nbsp;&nbsp;</span>{{tweet.text}}</span>
+          <span style="background-color: #E0F8E0"><span> {{tweet.created_at_str}}&nbsp;&nbsp;</span>{{tweet.text}}</span>
         {% else %}
-          <span> {{tweet.created_at}}&nbsp;&nbsp;</span>{{tweet.text}}
+          <span> {{tweet.created_at_str}}&nbsp;&nbsp;</span>{{tweet.text}}
         {% endif %}
       </p>
     {% endfor %}

@@ -109,7 +109,7 @@ def organizeTweets(tweets):
         hashtagArray.remove(tracked_hashtag)
         hashtagArray.sort()
         hashtagString = " ".join(hashtagArray)
-        tweet["created_at"] = datetimeformat(to_datetime(tweet["created_at"]))
+        tweet["created_at"] = to_datetime(tweet["created_at"])
         tweet["_id"] = str(tweet["_id"])
         for hashtag in hashtagArray:
             tweet["text"] = tweet["text"].replace("#"+hashtag, "")
@@ -132,6 +132,8 @@ def organizeTweets(tweets):
                                                 "is_author": is_author}
         organizedHashtags[hashtagString]["user_photos"]=list(set(organizedHashtags[hashtagString]["user_photos"]))
         organizedHashtags[hashtagString]["tweets"].sort(key=lambda x: x["created_at"], reverse=True)
+        for ct in range(len(organizedHashtags[hashtagString]["tweets"])):
+            organizedHashtags[hashtagString]["tweets"][ct]["created_at_str"] = datetimeformat(organizedHashtags[hashtagString]["tweets"][ct]["created_at"])
         organizedHashtags[hashtagString]["most_recent"]=organizedHashtags[hashtagString]["tweets"][0]["created_at"]
     hashtagList = []
     for hashtag in organizedHashtags:
