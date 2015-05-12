@@ -96,6 +96,8 @@ $( document ).ready(function() {
 		composed_tweet = text + additional_hashtags;
 		$.post( "/sendToTwitter", composed_tweet, function(data){
 			$('#tweet-textarea').val("");
+			$("#sent-alert").show();
+			setTimeout(function() { $("#sent-alert").hide(); }, 3000)
 		})
 	})
 });
