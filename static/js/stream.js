@@ -85,4 +85,10 @@ $( document ).ready(function() {
 		$("#focusThread").toggle();
 		$("#newThread").toggle();
 	});
+	$('#tweet-textarea').bind('input propertychange', function() {
+		numCharsTotal = parseInt($('#charsTotal').text())
+		numCharsInput = $('#tweet-textarea').val().length;
+		$('#charsLeft').text((numCharsTotal - numCharsInput).toString())
+		console.log('changed');
+	})
 });

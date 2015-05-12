@@ -238,7 +238,8 @@ def start():
     session["id_str"] = '123' #api.me().id
     #example, print your latest status posts
     tweets = loads(stream())
-    return flask.render_template('classtweeter.html', groups=tweets)
+    hashtag_to_send = " #" + tweets[0]["hashtagString"] + " #" + tracked_hashtag
+    return flask.render_template('classtweeter.html', groups=tweets, hashtag_to_send=hashtag_to_send)
 
 
 if __name__ == "__main__":

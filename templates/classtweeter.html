@@ -43,7 +43,11 @@
   </span>
   <nav class="navbar navbar-default navbar-fixed-bottom" style="float: left; height: 22vh; background-color:transparent; border: none; margin-left:15px;">
     <a style="float:right; margin-top: 10vh; margin-right: 5vh;" class="round-button" id="new-thread-button">+</a>
-    <textarea class="form-control" style="height: 22vh; width: 30.8vw; background-color:white;">Add to the conversation here...</textarea>
+    <div style="height: 22vh; width: 30.8vw; background-color:white;">
+      <textarea id="tweet-textarea" style="height: 15vh; border-radius: 0px;" class="form-control" placeholder="Add to the conversation here..." maxlength="{{140 - hashtag_to_send | length}}"></textarea>
+      <button class="btn btn-primary" style="background-color:#4099FF; margin-top:5px; float:right; border: 0px; border-radius: 0px;"> Send </button>
+      <span style="float: right; margin-right: 10px; margin-top: 10px;"><span id="charsLeft">{{140 - hashtag_to_send | length}}</span> / <span id="charsTotal">{{140 - hashtag_to_send | length}} </span> </span>
+    </div>
   </nav>
 
 
