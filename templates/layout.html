@@ -28,14 +28,16 @@
                 margin-left: 0px;
                 margin-top: 0px;
                 margin-bottom: 0px;
-                height:80vh;
+                height:100%;
                 overflow:scroll;
                 border-left: 1px solid #4099FF;
-                border-right: 1px solid #4099FF;">
+                border-right: 1px solid #4099FF;
+                position: fixed;">
         {% block sidebar %}{% endblock %}
       </div>
       
-      <div class="col-sm-4 col-md-8" style= "margin-top: 0px; margin-left: 5px; ">
+      <div class="col-sm-4 col-md-8" style= "margin-top: 0px; margin-left: 5px; margin-left: 425px; ">
+        <span style="position: fixed; z-index: 100000000; right: 20px; bottom: 20px;"><a style="float:right; margin-top: 10vh; margin-right: 5vh;" class="round-button" id="new-thread-button">+</a></span>
         {% include 'header.html' %}
         {% block content %}{% endblock %}
       </div>
