@@ -1,8 +1,15 @@
 Flask==0.10.1
+Flask-SocketIO==0.6.0
+gevent==1.0.1
+gevent-socketio==0.3.6
+gevent-websocket==0.9.3
+greenlet==0.4.6
+gunicorn==19.3.0
 itsdangerous==0.24
 Jinja2==2.7.3
 MarkupSafe==0.23
 oauthlib==0.7.2
+pymongo==3.0.1
 requests==2.6.0
 requests-oauthlib==0.4.2
 six==1.9.0
