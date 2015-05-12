@@ -230,13 +230,19 @@ def contentsOfHashtag():
 def tweetTile():
     return render_template('tweettile.html', groups=request.json)
 
+@app.route("/sendToTwitter", methods=['POST'])
+@login_required
+def sendToTwitter():
+    text = request.form.to_dict().keys()[0]
+    api = getAPIObject()
+    api.update_status(status=text)
+    return 'done'
+
 @app.route("/")
 @login_required
 def start():
-    #auth done, app logic can begin
     api = getAPIObject()
-    session["id_str"] = '123' #api.me().id
-    #example, print your latest status posts
+    session["id_str"] = api.me().id
     tweets = loads(stream())
     hashtag_to_send = " #" + tweets[0]["hashtagString"] + " #" + tracked_hashtag
     return flask.render_template('classtweeter.html', groups=tweets, hashtag_to_send=hashtag_to_send)

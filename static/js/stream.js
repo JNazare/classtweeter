@@ -89,6 +89,13 @@ $( document ).ready(function() {
 		numCharsTotal = parseInt($('#charsTotal').text())
 		numCharsInput = $('#tweet-textarea').val().length;
 		$('#charsLeft').text((numCharsTotal - numCharsInput).toString())
-		console.log('changed');
+	})
+	$("#send-tweet-button").click(function(){
+		text = $('#tweet-textarea').val();
+		additional_hashtags = $("#hashtag_to_add").val()
+		composed_tweet = text + additional_hashtags;
+		$.post( "/sendToTwitter", composed_tweet, function(data){
+			$('#tweet-textarea').val("");
+		})
 	})
 });
