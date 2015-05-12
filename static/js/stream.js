@@ -43,6 +43,10 @@ function focusThread(hashtag){
 			img_html = img_html + img_html_1 + data.user_photos[i] + img_html_2
 		}
 		$('#focused-group-avatars').html(img_html)
+		if ($("#new-group-name").is(':visible')==true) {
+			$("#focusThread").toggle();
+			$("#newThread").toggle();
+		}
 	})
 }
 
