@@ -37,8 +37,15 @@ $( document ).ready(function() {
 	});
 	$("#sort-my-thoughts-button").click(function(){
 		$(".tweet-tile").each(function(index){
-			console.log($(this));
-			// console.log($(this).text());
+			author_class = $(this).attr('class').split(" ")[0];
+			if(author_class == "author_false"){
+				$(this).hide();
+			}
+		});
+	});
+	$("#sort-most-recent-button").click(function(){
+		$(".tweet-tile").each(function(index){
+			$(this).show();
 		});
 	})
 });
