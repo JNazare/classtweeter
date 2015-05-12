@@ -109,7 +109,7 @@ def organizeTweets(tweets):
         hashtagArray.remove(tracked_hashtag)
         hashtagArray.sort()
         hashtagString = " ".join(hashtagArray)
-        tweet["created_at"] = to_datetime(tweet["created_at"])
+        tweet["created_at"] = datetimeformat(to_datetime(tweet["created_at"]))
         tweet["_id"] = str(tweet["_id"])
         for hashtag in hashtagArray:
             tweet["text"] = tweet["text"].replace("#"+hashtag, "")
@@ -160,7 +160,9 @@ def groupnameToHashtag(name):
 def hashtagToGroupname(hashtag):
     return hashtag.replace("_", " ")
 
-
+@app.template_filter('strftime')
+def datetimeformat(value, format='%H:%M'):
+    return value.strftime(format)
 
 def login_required(f):
     @wraps(f)

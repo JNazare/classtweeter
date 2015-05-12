@@ -20,9 +20,9 @@ function focusThread(hashtag){
 		$('#focused-group-name').text(data.groupName);
 		html_string=""
 		for(i=data.tweets.length-1; i>-1; i--){
-			tweet_html = data.tweets[i].text;
+			tweet_html = "<span>" + data.tweets[i].created_at + "</span>&nbsp;&nbsp;" + data.tweets[i].text;
 			if(data.tweets[i].is_question){
-				tweet_html =  '<span style="background-color: #E0F8E0">' + data.tweets[i].text  + '</span>'
+				tweet_html =  '<span style="background-color: #E0F8E0">' + "<span>" + data.tweets[i].created_at + "</span>&nbsp;&nbsp;" + data.tweets[i].text  + '</span>'
 			}
 			html_string = html_string + "<p>" + tweet_html +"</p>"
 		}
@@ -47,7 +47,9 @@ function focusThread(hashtag){
 			$("#focusThread").toggle();
 			$("#newThread").toggle();
 		}
-		focused_thread = hashtag
+		sidebar = $('#sidebar');
+		sidebar.scrollTop(sidebar.prop("scrollHeight"));
+		focused_thread = hashtag;
 	})
 }
 
@@ -106,9 +108,11 @@ $( document ).ready(function() {
 		$("#newThread").toggle();
 		if ($("#new-group-name").is(':visible')==true) {
 			new_thread = true;
+			$("#"+ focused_thread).removeClass("thought-tile-selected");
 		}
 		else{
 			new_thread = false;
+			$("#"+ focused_thread).addClass("thought-tile-selected");
 		}
 	});
 	$('#tweet-textarea').bind('input propertychange', function() {

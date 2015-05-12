@@ -27,13 +27,15 @@
     <p>
       {% for tweet in groups[0].tweets %}
         {% if tweet.is_question %}
-          <span style="background-color: #E0F8E0">{{tweet.text}}</span>
+          <span style="background-color: #E0F8E0"><span> {{tweet.created_at}}&nbsp;&nbsp;</span>{{tweet.text}}</span>
         {% else %}
-          {{tweet.text}}
+          <span> {{tweet.created_at}}&nbsp;&nbsp;</span>{{tweet.text}}
         {% endif %}
       </p>
     {% endfor %}
   </span>
+  <!-- <span style="position: fixed; top: 60px; margin-left: 300px; font-size: 10px; font-weight: bold; text-align: center;"><br>OLDER</span>
+  <span style="position: fixed; top: 450px; margin-left: 300px; font-size: 10px; font-weight: bold; text-align: center;">MOST CURRENT</span> -->
   </span>
   <span id="newThread" style="display:none;">
     <div id="new-thread-form-group" class="form-group">
@@ -45,7 +47,7 @@
   <nav class="navbar navbar-default navbar-fixed-bottom" style="float: left; height: 22vh; background-color:transparent; border: none; margin-left:15px;">
     <div style="height: 22vh; width: 32vw; background-color:white;">
       <textarea id="tweet-textarea" style="height: 15vh; border-radius: 0px; border-left: 0px; border-right: 0px;" class="form-control" placeholder="Add to the conversation here..." maxlength="{{140 - hashtag_to_send | length}}"></textarea>
-      <button id="send-tweet-button" class="btn btn-primary" style="background-color:#4099FF; margin-top:5px; float:right; border: 0px; border-radius: 0px;"> Send </button>
+      <button id="send-tweet-button" class="btn btn-primary" style="background-color:#4099FF; margin-top:5px; float:right; border: 0px; border-radius: 0px; margin-right: 15px;"> Send </button>
       <span style="float: right; margin-right: 10px; margin-top: 10px;"><span id="charsLeft">{{140 - hashtag_to_send | length}}</span> / <span id="charsTotal">{{140 - hashtag_to_send | length}} </span> </span>
       <input id="hashtag_to_add" type="hidden" value="{{hashtag_to_send}}">
     </div>
