@@ -1,4 +1,22 @@
+function showOnlyMyTweets(){
+	$(".tweet-tile").each(function(index){
+		author_class = $(this).attr('class').split(" ")[0];
+		if(author_class == "author_false"){
+			$(this).hide();
+		}
+	});
+	show_only_my_tweets = true
+}
+
+function showAllTweets(){
+	$(".tweet-tile").each(function(index){
+		$(this).show();
+	});
+	show_only_my_tweets = false
+}
+
 $( document ).ready(function() {
+	show_only_my_tweets = false
 	window.setInterval(function(){
 		$.get( "/stream", function( data ) {
 			data = $.parseJSON(data);
@@ -9,6 +27,9 @@ $( document ).ready(function() {
 			  data: JSON.stringify(data)
 			}).done(function(tweet_html){
 				$("#allTweets").html(tweet_html);
+				if(show_only_my_tweets==true){
+					showOnlyMyTweets();
+				}
 				console.log("refreshed tweets");
 			});
 		});
@@ -45,16 +66,9 @@ $( document ).ready(function() {
 		})
 	});
 	$("#sort-my-thoughts-button").click(function(){
-		$(".tweet-tile").each(function(index){
-			author_class = $(this).attr('class').split(" ")[0];
-			if(author_class == "author_false"){
-				$(this).hide();
-			}
-		});
+		showOnlyMyTweets()
 	});
 	$("#sort-most-recent-button").click(function(){
-		$(".tweet-tile").each(function(index){
-			$(this).show();
-		});
+		showAllTweets()
 	})
 });
