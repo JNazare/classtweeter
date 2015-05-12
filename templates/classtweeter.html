@@ -2,34 +2,34 @@
 {% block sidebar %}
   <strong><span id="focused-group-name">{{groups[0].hashtagString | hashtagToGroupname | capitalize}}</span></strong>
   {% if groups[0].user_photos | length > 3 %}
-  <button style="float:right; margin-top: -5px; margin-right: 2px;
-  margin-left: 2px;" type="button" class="btn btn-default btn-circle"><i class="glyphicon"></i>
+    <button style="float:right; margin-top: -5px; margin-right: 2px;
+    margin-left: 2px;" type="button" class="btn btn-default btn-circle"><i class="glyphicon"></i>
     <span id="focused-more-avatars">{{groups[0].user_photos | length - 3}}</span>
-  </button>
+    </button>
   {% endif %}
   <span id="focused-group-avatars">
-  {% if groups[0].user_photos | length <= 3 %}
-    {% for avatar in groups[0].user_photos %}
-      <img src="{{avatar}}" class="img-circle" style="height:30px; width:30px; float:right; margin-top: -5px; margin-right: 2px;
-      margin-left: 2px;" alt="Circular Image">
-    {% endfor %}
-  {% else %}
-    {% for avatar in groups[0].user_photos[:3] %}
-      <img src="{{avatar}}" class="img-circle" style="height:30px; width:30px; float:right; margin-top: -5px; margin-right: 2px;
-      margin-left: 2px;" alt="Circular Image">
-    {% endfor %}
-  {% endif %}
+    {% if groups[0].user_photos | length <= 3 %}
+      {% for avatar in groups[0].user_photos %}
+        <img src="{{avatar}}" class="img-circle" style="height:30px; width:30px; float:right; margin-top: -5px; margin-right: 2px;
+        margin-left: 2px;" alt="Circular Image">
+      {% endfor %}
+    {% else %}
+      {% for avatar in groups[0].user_photos[:3] %}
+        <img src="{{avatar}}" class="img-circle" style="height:30px; width:30px; float:right; margin-top: -5px; margin-right: 2px;
+        margin-left: 2px;" alt="Circular Image">
+      {% endfor %}
+    {% endif %}
   </span>
   <br></br>
   <span id="focused-group-tweets">
     <p>
-    {% for tweet in groups[0].tweets %}
-      {% if tweet.is_question %}
-        <span style="background-color: #E0F8E0">{{tweet.text}}</span>
-      {% else %}
-        {{tweet.text}}
-      {% endif %}
-    </p>
+      {% for tweet in groups[0].tweets %}
+        {% if tweet.is_question %}
+          <span style="background-color: #E0F8E0">{{tweet.text}}</span>
+        {% else %}
+          {{tweet.text}}
+        {% endif %}
+      </p>
     {% endfor %}
   </span>
   <nav class="navbar navbar-default navbar-fixed-bottom" style="float: left; height: 22vh; background-color:transparent; border: none; margin-left:15px;">
@@ -38,28 +38,10 @@
   </nav>
 {% endblock %}
 {% block content %}
-  {% for group in groups %}
-    <span class="author_{{group.is_author | lower}} tweet-tile">
-    {% if group.tweets[0].is_question %}
-    <div id="{{group.hashtagString}}" class="thought-tile col-sm-4 col-md-4" style="background-color:#E0F8E0; height: 200px; overflow: scroll; margin-bottom: 15px;">
-    {% else %}
-    <div id="{{group.hashtagString}}" class="thought-tile col-sm-4 col-md-4" style="background-color:#fff; height: 200px; overflow: scroll; margin-bottom: 15px;" value="{{group.is_author}}">
-    {% endif %}
-      <span class="group-name"> <strong> {{group.hashtagString | hashtagToGroupname | capitalize}} </strong> </span>
-      {% for avatar in group.user_photos %}
-        <img src="../static/images/profile_picture.png" class="img-circle" style="height:30px; width:30px; float:right; margin-top: -5px; margin-right: 2px;
-        margin-left: 2px;" alt="Circular Image">
-      {% endfor %}
-      <p style="margin-bottom: 20px;">
-        {{ group.tweets[0].text }}
-      </p>
-      {% if group.tweets | length - 1 > 0 %}
-        <span style="position: absolute; bottom: 0;"> <p> <a href="#"> {{group.tweets | length - 1}} more in this thread </a> </p> </span>
-      {% endif %}
-    </div>
-    </span>
-  {% endfor %}
-{% endblock %}
-{% block scripts %}
-  <script type="text/javascript" src="../static/js/stream.js"></script>
-{% endblock %}
+  <span id="allTweets">
+  {% include 'tweettile.html' %}
+  </span>
+  {% endblock %}
+  {% block scripts %}
+    <script type="text/javascript" src="../static/js/stream.js"></script>
+  {% endblock %}

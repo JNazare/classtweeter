@@ -1,0 +1,21 @@
+{% for group in groups %}
+<span class="author_{{group.is_author | lower}} tweet-tile">
+  {% if group.tweets[0].is_question %}
+    <div id="{{group.hashtagString}}" class="thought-tile col-sm-4 col-md-4" style="background-color:#E0F8E0; height: 200px; overflow: scroll; margin-bottom: 15px;">
+    {% else %}
+      <div id="{{group.hashtagString}}" class="thought-tile col-sm-4 col-md-4" style="background-color:#fff; height: 200px; overflow: scroll; margin-bottom: 15px;" value="{{group.is_author}}">
+      {% endif %}
+      <span class="group-name"> <strong> {{group.hashtagString | hashtagToGroupname | capitalize}} </strong> </span>
+      {% for avatar in group.user_photos %}
+        <img src="../static/images/profile_picture.png" class="img-circle" style="height:30px; width:30px; float:right; margin-top: -5px; margin-right: 2px;
+        margin-left: 2px;" alt="Circular Image">
+      {% endfor %}
+      <p style="margin-bottom: 20px;">
+        {{ group.tweets[0].text }}
+      </p>
+      {% if group.tweets | length - 1 > 0 %}
+        <span style="position: absolute; bottom: 0;"> <p> <a href="#"> {{group.tweets | length - 1}} more in this thread </a> </p> </span>
+      {% endif %}
+    </div>
+  </span>
+{% endfor %}

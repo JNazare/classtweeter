@@ -1,7 +1,16 @@
 $( document ).ready(function() {
 	window.setInterval(function(){
 		$.get( "/stream", function( data ) {
-			// console.log(data);
+			data = $.parseJSON(data);
+			$.ajax({
+			  type: "POST",
+			  contentType: "application/json; charset=utf-8",
+			  url: "/getTweetTile",
+			  data: JSON.stringify(data)
+			}).done(function(tweet_html){
+				$("#allTweets").html(tweet_html);
+				console.log("refreshed tweets");
+			});
 		});
 	}, 5000);
 	$(".thought-tile").click(function(){

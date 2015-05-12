@@ -1,4 +1,4 @@
-from flask import Flask, request, session, redirect, url_for, jsonify
+from flask import Flask, request, session, redirect, url_for, jsonify, render_template
 import flask 
 from functools import wraps
 import tweepy
@@ -225,12 +225,17 @@ def contentsOfHashtag():
     hashtagContents["groupName"]=hashtagToGroupname(hashtag).title()
     return jsonify(hashtagContents)
 
+@app.route("/getTweetTile", methods=['POST'])
+@login_required
+def tweetTile():
+    return render_template('tweettile.html', groups=request.json)
+
 @app.route("/")
 @login_required
 def start():
     #auth done, app logic can begin
     api = getAPIObject()
-    session["id_str"] = api.me().id
+    session["id_str"] = '123' #api.me().id
     #example, print your latest status posts
     tweets = loads(stream())
     return flask.render_template('classtweeter.html', groups=tweets)
