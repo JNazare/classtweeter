@@ -15,6 +15,12 @@ function showAllTweets(){
 	show_only_my_tweets = false
 }
 
+function updateNumCharsAllowed(numChars){
+	$("#charsTotal").text(numChars);
+	$("#charsLeft").text(numChars);
+	$("#tweet-textarea").attr('maxlength', numChars);
+}
+
 function focusThread(hashtag){
 	focused_thread = hashtag;
 	$.post( "/contentsOfHashtag", {"hashtag": hashtag}, function(data){
@@ -50,6 +56,8 @@ function focusThread(hashtag){
 		}
 		sidebar = $('#sidebar');
 		sidebar.scrollTop(sidebar.prop("scrollHeight"));
+		var numCharsUsed = 140-(" #" + hashtag + " #classtweeter").length;
+		updateNumCharsAllowed(numCharsUsed);
 	})
 }
 
@@ -68,7 +76,7 @@ $( document ).ready(function() {
 			  data: JSON.stringify(data)
 			}).done(function(tweet_html){
 				$("#allTweets").html(tweet_html);
-				if(new_thread == false){
+				if($("#new-group-name").is(':visible')==false){
 					$("#"+focused_thread).addClass("thought-tile-selected");
 					focusThread(focused_thread);
 				}
@@ -98,10 +106,14 @@ $( document ).ready(function() {
 	});
 
 	$("#sort-my-thoughts-button").click(function(){
-		showOnlyMyTweets()
+		showOnlyMyTweets();
+		$(this).addClass("toggle-clicked");
+		$("#sort-most-recent-button").removeClass("toggle-clicked");
 	});
 	$("#sort-most-recent-button").click(function(){
-		showAllTweets()
+		showAllTweets();
+		$(this).addClass("toggle-clicked");
+		$("#sort-my-thoughts-button").removeClass("toggle-clicked");
 	});
 	$("#new-thread-button").click(function(){
 		$("#focusThread").toggle();
@@ -109,10 +121,13 @@ $( document ).ready(function() {
 		if ($("#new-group-name").is(':visible')==true) {
 			new_thread = true;
 			$("#"+ focused_thread).removeClass("thought-tile-selected");
+			updateNumCharsAllowed(106);
 		}
 		else{
 			new_thread = false;
 			$("#"+ focused_thread).addClass("thought-tile-selected");
+			var numCharsUsed = 140-(" #" + focused_thread + " #classtweeter").length;
+			updateNumCharsAllowed(numCharsUsed);
 		}
 	});
 	$('#tweet-textarea').bind('input propertychange', function() {
@@ -125,16 +140,22 @@ $( document ).ready(function() {
 		if (text.length > 0){
 			additional_hashtags = " #" + focused_thread + " #classtweeter"
 			if ($("#new-group-name").is(':visible')==true) {
-				additional_hashtags = " #" + $("#new-group-name").val().toLowerCase().replace(" ", "_") + " #classtweeter";
+				additional_hashtags = " #" + $("#new-group-name").val().toLowerCase().split(" ").join("_") + " #classtweeter";
 			}
 			composed_tweet = text + additional_hashtags;
-			console.log(composed_tweet);
 			$.post( "/sendToTwitter", composed_tweet, function(data){
 				$('#tweet-textarea').val("");
 				$("#send-tweet-button").removeClass("btn-unsent").addClass("btn-sent");
 				$("#send-tweet-button").text("SENT!");
 				$("#new-thread-form-group").removeClass("has-error");
 				$("#new-thread-control-label").text("New Thread Name");
+				if ($("#new-group-name").is(':visible')==true) {
+					$("#focusThread").toggle();
+					$("#newThread").toggle();
+					$("#"+focused_thread).addClass("thought-tile-selected");
+					var numCharsUsed = 140-(" #" + focused_thread + " #classtweeter").length;
+					updateNumCharsAllowed(numCharsUsed);
+				}
 				setTimeout(function() { $("#send-tweet-button").removeClass("btn-sent").addClass("btn-unsent"); $("#send-tweet-button").text("Send");}, 3000)
 			})
 		}

@@ -5,8 +5,8 @@
   <strong><span id="focused-group-name">{{groups[0].hashtagString | hashtagToGroupname | capitalize}}</span></strong>
   {% if groups[0].user_photos | length > 3 %}
     <button style="float:right; margin-top: -5px; margin-right: 2px;
-    margin-left: 2px;" type="button" class="btn btn-default btn-circle"><i class="glyphicon"></i>
-    <span id="focused-more-avatars">{{groups[0].user_photos | length - 3}}</span>
+    margin-left: 2px;" type="button" class="btn btn-default btn-circle" disabled="true"><i class="glyphicon"></i>
+    <span id="focused-more-avatars">{{groups[0].user_photos | length - 3}}+</span>
     </button>
   {% endif %}
   <span id="focused-group-avatars">
@@ -40,7 +40,7 @@
   <span id="newThread" style="display:none;">
     <div id="new-thread-form-group" class="form-group">
       <label id="new-thread-control-label" class="control-label" for="inputSuccess1">New Thread Name</label>
-      <input id="new-group-name" type="text" class="form-control" placeholder="Group 1" aria-describedby="basic-addon1">
+      <input id="new-group-name" type="text" class="form-control" placeholder="Group 1" aria-describedby="basic-addon1" maxlength="20">
     </div>
   </span>
   <nav class="navbar navbar-default navbar-fixed-bottom" style="float: left; height: 22vh; background-color:transparent; border: none; margin-left:15px;">

@@ -46,3 +46,7 @@ span.group-name{
 .btn-sent{
     background-color: green;
 }
+
+.toggle-clicked{
+    background-color: #ccc;
+}
