@@ -16,6 +16,7 @@ function showAllTweets(){
 }
 
 function focusThread(hashtag){
+	focused_thread = hashtag;
 	$.post( "/contentsOfHashtag", {"hashtag": hashtag}, function(data){
 		$('#focused-group-name').text(data.groupName);
 		html_string=""
@@ -49,7 +50,6 @@ function focusThread(hashtag){
 		}
 		sidebar = $('#sidebar');
 		sidebar.scrollTop(sidebar.prop("scrollHeight"));
-		focused_thread = hashtag;
 	})
 }
 
@@ -123,11 +123,12 @@ $( document ).ready(function() {
 	$("#send-tweet-button").click(function(){
 		text = $('#tweet-textarea').val();
 		if (text.length > 0){
-			additional_hashtags = $("#hashtag_to_add").val()
+			additional_hashtags = " #" + focused_thread + " #classtweeter"
 			if ($("#new-group-name").is(':visible')==true) {
 				additional_hashtags = " #" + $("#new-group-name").val().toLowerCase().replace(" ", "_") + " #classtweeter";
 			}
 			composed_tweet = text + additional_hashtags;
+			console.log(composed_tweet);
 			$.post( "/sendToTwitter", composed_tweet, function(data){
 				$('#tweet-textarea').val("");
 				$("#send-tweet-button").removeClass("btn-unsent").addClass("btn-sent");
