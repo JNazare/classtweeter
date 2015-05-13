@@ -55,7 +55,7 @@ function focusThread(hashtag){
 			$("#newThread").toggle();
 		}
 		sidebar = $('#sidebar');
-		sidebar.scrollTop(sidebar.prop("scrollHeight"));
+		// sidebar.scrollTop(sidebar.prop("scrollHeight"));
 		var numCharsUsed = 140-(" #" + hashtag + " #classtweeter").length;
 		updateNumCharsAllowed(numCharsUsed);
 	})
