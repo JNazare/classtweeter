@@ -1,0 +1,14 @@
+<div class="row">
+    <div class="col-md-8 col-sm-8 current-hashtag">
+        <h4> {{focus_group.hashtagString | hashtagToGroupname | capitalize}} </h4>
+    </div>
+</div>
+{% for tweet in focus_group.tweets | reverse %}
+    <div class="row current-tweet-row">
+        <div class="col-md-2 col-sm-2 current-tweet-col">
+            <img src="{{tweet.user_profile_image_url}}" class="img-circle avatars" alt="Circular Image">
+            <p class="small">{{tweet.created_at_str}}</p>
+        </div>
+        <div class="col-md-8 col-sm-8">{{tweet.text}}</div>
+    </div>
+{% endfor %}

@@ -1,0 +1,39 @@
+{% for row in groups|batch(3) %}
+	<div class="row">
+		{% for group in row %}
+			<div class="col-md-4 col-sm-4 tweet-tile">
+				<div class="col-md-12 col-sm-12 tweet-tile-interior">
+					<div class="row">
+						<div class="col-md-7 col-sm-7 hashtagString">
+							{{group.hashtagString | hashtagToGroupname | capitalize}}
+						</div>
+						<div class="col-md-5 col-sm-5">
+							{% if group.user_photos | length > 1 %}
+								<button class="btn btn-default btn-circle btn-sm extra-avatars" disabled="true">
+									{{group.user_photos | length - 1}}+
+								</button>
+							{% endif %}
+							{% for avatar in group.user_photos[:1] %}
+								<img src="{{avatar}}" class="img-circle avatars" alt="Circular Image">
+							{% endfor %}
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12 col-sm-12 tweet-text">
+							{{ group.tweets[0].text }}
+						</div>
+					</div>
+					{% if group.tweets | length - 1 > 0 %}
+					<div class="row">
+						<div class="col-md-12 col-sm-12">
+							<p class="more-thoughts">
+								{{group.tweets | length - 1}} more thoughts in this thread
+							</p>
+						</div>
+					</div>
+					{% endif %}
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+{% endfor %}

@@ -5,7 +5,7 @@
   <strong><span id="focused-group-name">{{groups[0].hashtagString | hashtagToGroupname | capitalize}}</span></strong>
   {% if groups[0].user_photos | length > 3 %}
     <button style="float:right; margin-top: -5px; margin-right: 2px;
-    margin-left: 2px;" type="button" class="btn btn-default btn-circle" disabled="true"><i class="glyphicon"></i>
+    margin-left: 2px;" type="button" class="btn btn-default btn-circle btn-sm" disabled="true"><i class="glyphicon"></i>
     <span id="focused-more-avatars">{{groups[0].user_photos | length - 3}}+</span>
     </button>
   {% endif %}

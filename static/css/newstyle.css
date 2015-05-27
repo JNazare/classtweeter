@@ -1,0 +1,69 @@
+body{
+	background-color: #f5f8fa;
+}
+
+div.sidebar-wrapper{
+	border-right: 1px solid #4099FF;
+}
+
+div.hashtagString{
+	font-weight: bold;
+}
+
+div.tweet-tile-interior{
+	padding-top: 20px;
+	background-color: #fff;
+	height: 200px; 
+	border-radius: 5px;
+	margin-right: 15px;
+	margin-bottom: 30px;
+	overflow: scroll;
+}
+
+.avatars{
+	float: right;
+	height:30px; 
+	width:30px;
+	margin-right: 5px;
+	margin-bottom: 5px;
+}
+
+.extra-avatars{
+	float: right;
+	margin-bottom: 5px;
+}
+
+div.tweet-text{
+	margin-top: 10px;
+}
+
+p.more-thoughts{
+	color: #4099FF;
+	margin-top: 10px;
+}
+
+h2.hashtagToTrack{
+	margin-bottom: 30px;
+}
+
+li.sidebar-brand{
+	font-weight: bold;
+}
+
+div.current-hashtag{
+	margin-left: 20px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+div.current-tweet-row{
+	margin-bottom: 10px;
+}
+
+div.current-tweet-col{
+	margin-left: 20px;
+}
+
+div.sidebar-content{
+	overflow: scroll;
+}

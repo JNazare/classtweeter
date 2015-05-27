@@ -249,6 +249,16 @@ def start():
     session["id_str"] = api.me().id
     tweets = loads(stream())
     hashtag_to_send = " #" + tweets[0]["hashtagString"] + " #" + tracked_hashtag
+    return flask.render_template('index.html', groups=tweets, hashtag_to_send=hashtag_to_send, focus_group=tweets[0])
+
+
+@app.route("/old")
+@login_required
+def old():
+    api = getAPIObject()
+    session["id_str"] = api.me().id
+    tweets = loads(stream())
+    hashtag_to_send = " #" + tweets[0]["hashtagString"] + " #" + tracked_hashtag
     return flask.render_template('classtweeter.html', groups=tweets, hashtag_to_send=hashtag_to_send)
 
 
