@@ -143,6 +143,73 @@ def organizeTweets(tweets):
     return [dumps(hashtagList), dumps(organizedHashtags)]
 
 
+
+
+def sortHashtagsinTweet(tweet):
+    hashtagArray = tweet.get("hashtags", None)
+    for hashtag in hashtagArray:
+        tweet["text"] = tweet["text"].replace("#"+hashtag, "")
+    hashtagArray.remove(tracked_hashtag)
+    hashtagArray.sort()
+    hashtagString = " ".join(hashtagArray)
+    return [tweet, hashtagString]
+
+def formatDateTimeofTweet(tweet):
+    tweet["created_at"] = to_datetime(tweet["created_at"]) - timedelta(hours=4)
+    tweet["created_at_str"] = datetimeformat(tweet["created_at"])
+    return tweet
+
+def tagQuestioninTweet(tweet):
+    tweet["is_question"]=False
+    if "?" in tweet["text"]:
+        tweet["is_question"]=True
+    return tweet
+
+def tagAuthorinTweet(tweet):
+    tweet["is_author"]=False
+    if int(tweet["user_id"])==session["id_str"]:
+        tweet["is_author"]=True
+    return tweet
+
+def addTweetToDict(organizedHashtags, tweet, hashtagString):
+    if organizedHashtags.get(hashtagString, None) != None:
+        organizedHashtags[hashtagString]["tweets"].append(tweet)
+        organizedHashtags[hashtagString]["user_photos"].append(tweet["user_profile_image_url"])
+        if organizedHashtags[hashtagString]["is_author"] == False and tweet["is_author"]==True:
+            organizedHashtags[hashtagString]["is_author"] = True
+    else:
+        organizedHashtags[hashtagString] = {"tweets": [tweet], "user_photos": 
+                                            [tweet["user_profile_image_url"]], 
+                                            "total_favorites": int(tweet["favorite_count"]),
+                                            "is_author": tweet["is_author"]}
+    return organizedHashtags
+
+def sortHashtagstoList(organizedHashtags):
+    hashtagList = []
+    for hashtag in organizedHashtags:
+        hashtagList.append(organizedHashtags[hashtag])
+    hashtagList.sort(key=lambda x: x["most_recent"], reverse=True)
+    return hashtagList
+
+def sortTweets(tweets):
+    organizedHashtags = {}
+    for tweet in tweets:
+        [tweet, hashtagString] = sortHashtagsinTweet(tweet)
+        tweet = formatDateTimeofTweet(tweet)
+        tweet["_id"] = str(tweet["_id"])
+        tweet = tagQuestioninTweet(tweet)
+        tweet = tagAuthorinTweet(tweet)
+        organizedHashtags = addTweetToDict(organizedHashtags, tweet, hashtagString)
+    for hashtagString in organizedHashtags.keys():
+        organizedHashtags[hashtagString]["user_photos"]=list(set(organizedHashtags[hashtagString]["user_photos"]))
+        organizedHashtags[hashtagString]["tweets"].sort(key=lambda x: x["created_at"], reverse=True)
+        organizedHashtags[hashtagString]["most_recent"]=organizedHashtags[hashtagString]["tweets"][0]["created_at"]
+        organizedHashtags[hashtagString]["hashtagString"] = hashtagString
+        organizedHashtags[hashtagString]["raw_data"]=json.dumps(organizedHashtags[hashtagString], default=json_util.default)
+    hashtagList = sortHashtagstoList(organizedHashtags)
+    return hashtagList 
+
+
 app = Flask(__name__)
 app.secret_key = 'medialab'
     
@@ -160,6 +227,7 @@ def groupnameToHashtag(name):
 
 @app.template_filter('hashtagToGroupname')
 def hashtagToGroupname(hashtag):
+    # print hashtag
     return hashtag.replace("_", " ")
 
 @app.template_filter('strftime')
@@ -247,9 +315,23 @@ def sendToTwitter():
 def start():
     api = getAPIObject()
     session["id_str"] = api.me().id
-    tweets = loads(stream())
-    hashtag_to_send = " #" + tweets[0]["hashtagString"] + " #" + tracked_hashtag
-    return flask.render_template('index.html', groups=tweets, hashtag_to_send=hashtag_to_send, focus_group=tweets[0])
+    tweets = dumps(list(connect().collected_tweets.find()))
+    organizedTweets = sortTweets(loads(tweets))
+    return flask.render_template('index.html', groups=organizedTweets, focus_group=organizedTweets[0])
+
+
+@app.route('/refresh')
+@login_required
+def refresh():
+    handle = connect()
+    tweets = dumps(list(handle.collected_tweets.find()))
+    organizedTweets = sortTweets(loads(tweets))
+    return render_template('tweetcard.html', groups=organizedTweets)
+
+@app.route('/focus', methods=['POST'])
+@login_required
+def focus():
+    return render_template('sidebar-content.html', focus_group=request.json)
 
 
 @app.route("/old")

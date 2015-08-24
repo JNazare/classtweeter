@@ -18,6 +18,8 @@ div.tweet-tile-interior{
 	margin-right: 15px;
 	margin-bottom: 30px;
 	overflow: scroll;
+	cursor: pointer;
+	border: 1px solid #ffffff;
 }
 
 .avatars{
@@ -65,5 +67,10 @@ div.current-tweet-col{
 }
 
 div.sidebar-content{
+	max-height: 80vh;
 	overflow: scroll;
+}
+
+div.active-thread{
+	border: 1px solid #4099FF;
 }

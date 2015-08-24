@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Simple Sidebar - Start Bootstrap Template</title>
+    <title>ClassTweeter</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../static/css/bootstrap.min.css" rel="stylesheet">
@@ -44,14 +44,16 @@
                     <div class="col-md-12 col-sm-12">
                         <center>
                             <h2 class="hashtagToTrack">
-                            <span id="hashtagToTrack">
+                            <span id="hashtagToTrack-js">
                                 #ClassTweeter
                             </span>
                             </h2>
                         </center>
                     </div>
                 </div>
-                {% include 'tweetcard.html' %}
+                <span id="tweetcard-js">
+                    {% include 'tweetcard.html' %}
+                </span>
             </div>
         </div>
         <!-- /#page-content-wrapper -->
@@ -64,14 +66,7 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="../static/js/bootstrap.min.js"></script>
-
-    <!-- Menu Toggle Script -->
-    <script>
-    $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
-    });
-    </script>
+    <script src="../static/js/newstream.js"></script>
 
 </body>
 

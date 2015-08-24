@@ -99,7 +99,7 @@ $( document ).ready(function() {
 	$(".thought-tile").click(function(){
 		$(".thought-tile").each(function(index){
 			$(this).removeClass("thought-tile-selected")
-		})
+		});
 		$(this).addClass("thought-tile-selected");
 		hashtag = $(this).attr('id');
 		focusThread(hashtag);

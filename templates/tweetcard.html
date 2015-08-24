@@ -2,7 +2,7 @@
 	<div class="row">
 		{% for group in row %}
 			<div class="col-md-4 col-sm-4 tweet-tile">
-				<div class="col-md-12 col-sm-12 tweet-tile-interior">
+				<div id="{{group.hashtagString}}" class="col-md-12 col-sm-12 tweet-tile-interior">
 					<div class="row">
 						<div class="col-md-7 col-sm-7 hashtagString">
 							{{group.hashtagString | hashtagToGroupname | capitalize}}
@@ -32,6 +32,7 @@
 						</div>
 					</div>
 					{% endif %}
+					<input type="hidden" value="{{group.raw_data}}">
 				</div>
 			</div>
 		{% endfor %}
