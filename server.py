@@ -57,13 +57,11 @@ def underscore_to_camelcase(value):
 def getAPIObject():
     auth = tweepy.OAuthHandler(CONSUMER_TOKEN, CONSUMER_SECRET)
     token = session.get('request_token', None)
-    
     auth.request_token = token
-
     try:
-            auth.get_access_token(session['verifier'])
+        auth.get_access_token(str(session['verifier']))
     except tweepy.TweepError:
-            print 'Error! Failed to get access token.'
+        print 'Error! Failed to get access token.'
     
     #now you have access!
     api = tweepy.API(auth)
@@ -218,7 +216,7 @@ CONSUMER_TOKEN=twitterKeys[0]
 CONSUMER_SECRET=twitterKeys[1]
 MY_ACCESS_TOKEN=twitterKeys[2]
 MY_ACCESS_SECRET=twitterKeys[3]
-CALLBACK_URL = 'http://localhost:5000/verify'
+CALLBACK_URL = 'http://8d5cf986.ngrok.io/verify'
 # session = dict()
  #you can save these values to a database
 
@@ -253,7 +251,6 @@ def login():
         #get the request tokens
         redirect_url= auth.get_authorization_url()
         session['request_token']= auth.request_token
-        # print session['request_token']
     except tweepy.TweepError:
         print 'Error! Failed to get request token'
     
@@ -262,12 +259,11 @@ def login():
 
 @app.route("/verify")
 def get_verification():
-    
     #get the verifier key from the request url
     session['verifier'] = request.args['oauth_verifier']
-    api = getAPIObject()
-    session['access_token']=session.get('request_token', None)
-
+    session['oauth_token']=request.args['oauth_token']
+    # api = getAPIObject()
+    # session['access_token']=session.get('request_token', None)
     return flask.redirect(flask.url_for('start'))
 
 @app.route("/logout")
