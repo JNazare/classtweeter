@@ -31,8 +31,9 @@ $( document ).ready(function() {
 			addClickability();
 			$("#"+focused_thread).addClass("active-thread");
 		});
-		console.log('refreshed');
 		
 	}, 5000);
 });
+
+
 

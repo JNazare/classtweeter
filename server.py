@@ -13,6 +13,8 @@ import re
 from datetime import datetime, timedelta
 from email.utils import parsedate_tz
 
+key_user = ''
+secret_user = ''
 tracked_hashtag = 'classtweeter'
 
 def to_datetime(datestring):
@@ -56,6 +58,7 @@ def underscore_to_camelcase(value):
 
 def getAPIObject():
     auth = tweepy.OAuthHandler(CONSUMER_TOKEN, CONSUMER_SECRET)
+    #auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)
     token = session.get('request_token', None)
     auth.request_token = token
     try:
@@ -65,15 +68,27 @@ def getAPIObject():
     
     #now you have access!
     api = tweepy.API(auth)
+    global key_user
+    key_user = auth.access_token
+    global secret_user
+    secret_user = auth.access_token_secret
+
+
+    
     return api
+
+
 
 def getStreamObject():
     auth = tweepy.OAuthHandler(CONSUMER_TOKEN, CONSUMER_SECRET)
     auth.set_access_token(MY_ACCESS_TOKEN, MY_ACCESS_SECRET)
     twitterStream = tweepy.Stream(auth, listener())
+    print ("tweet feed")
+    print ('this %s' %twitterStream)
     return twitterStream
 
 def tweetAsUser(API, text):
+    print ('api %s' %API)
     return API.update_status(status=text)
 
 def getUserInfo(API, username):
@@ -209,6 +224,7 @@ def sortTweets(tweets):
 
 
 app = Flask(__name__)
+#static_url_path='/static'
 app.secret_key = 'medialab'
     
 twitterKeys = keys.getKeys()
@@ -216,7 +232,8 @@ CONSUMER_TOKEN=twitterKeys[0]
 CONSUMER_SECRET=twitterKeys[1]
 MY_ACCESS_TOKEN=twitterKeys[2]
 MY_ACCESS_SECRET=twitterKeys[3]
-CALLBACK_URL = 'http://8d5cf986.ngrok.io/verify'
+#CALLBACK_URL = 'http://8d5cf986.ngrok.io/verify'
+CALLBACK_URL = 'http://127.0.0.1:5000/verify'
 # session = dict()
  #you can save these values to a database
 
@@ -249,8 +266,8 @@ def login():
         CALLBACK_URL)
     try: 
         #get the request tokens
-        redirect_url= auth.get_authorization_url()
-        session['request_token']= auth.request_token
+        redirect_url= auth.get_authorization_url() 
+        session['request_token']= auth.request_token ##store the request token in the session since we will need it inside the callback URL request
     except tweepy.TweepError:
         print 'Error! Failed to get request token'
     
@@ -262,8 +279,8 @@ def get_verification():
     #get the verifier key from the request url
     session['verifier'] = request.args['oauth_verifier']
     session['oauth_token']=request.args['oauth_token']
-    # api = getAPIObject()
-    # session['access_token']=session.get('request_token', None)
+    #api = getAPIObject()
+    #session['access_token']=session.get('request_token', None)
     return flask.redirect(flask.url_for('start'))
 
 @app.route("/logout")
@@ -301,16 +318,42 @@ def tweetTile():
 @app.route("/sendToTwitter", methods=['POST'])
 @login_required
 def sendToTwitter():
+    print ("reached")
     text = request.form.to_dict().keys()[0]
-    api = getAPIObject()
-    api.update_status(status=text)
+    #this = getAPIObject()
+    #tweetAsUser (api ,text)
+
+    auth = tweepy.OAuthHandler(CONSUMER_TOKEN, CONSUMER_SECRET)
+    auth.set_access_token(key_user, secret_user)
+    this = tweepy.API(auth)
+    print ('api is %s' %this)
+    print ('text %s' %text)
+    print ('key_user = %s' %key_user)
+    print ('secret_user = %s' %secret_user)
+    
+    #text = 'debug'
+    #print ('api is %s' %api)
+    #session["id_str"] = api.me().id
+    #session['access_token']=session.get('request_token', None)
+    #st = getStreamObject()
+    tweetAsUser(this, text)
+    #this.update_status(text)
+
+    #return flask.render_template('classtweeter.html', groups=tweets, hashtag_to_send=hashtag_to_send)
+    # return app.send_static_file('stream.js')
+    # #return send_from_directory(app.app_folder, stream.js)
     return 'done'
 
 @app.route("/")
 @login_required
 def start():
+    print ("started")
+    
     api = getAPIObject()
+    print ('api == %s' %api)
     session["id_str"] = api.me().id
+
+    #api.update_status('back again')
     tweets = dumps(list(connect().collected_tweets.find()))
     organizedTweets = sortTweets(loads(tweets))
     return flask.render_template('index.html', groups=organizedTweets, focus_group=organizedTweets[0])
@@ -319,6 +362,7 @@ def start():
 @app.route('/refresh')
 @login_required
 def refresh():
+    print ("refresh")
     handle = connect()
     tweets = dumps(list(handle.collected_tweets.find()))
     organizedTweets = sortTweets(loads(tweets))
@@ -341,4 +385,7 @@ def old():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.debug = True
+    port = 5000 #the custom port you want
+    app.run(host='127.0.0.1', port=port)
+    #app.run(debug=True)

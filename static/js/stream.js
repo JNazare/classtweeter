@@ -65,7 +65,7 @@ $( document ).ready(function() {
 	show_only_my_tweets = false;
 	focused_thread = $(".thought-tile:first").attr('id');
 	new_thread = false;
-	$("#"+focused_thread).addClass("thought-tile-selected")
+	$("#"+focused_thread).addClass("thought-tile-selected") 
 	window.setInterval(function(){
 		$.get( "/stream", function( data ) {
 			data = $.parseJSON(data);
@@ -106,6 +106,7 @@ $( document ).ready(function() {
 	});
 
 	$("#sort-my-thoughts-button").click(function(){
+		console.log("thoughts button")
 		showOnlyMyTweets();
 		$(this).addClass("toggle-clicked");
 		$("#sort-most-recent-button").removeClass("toggle-clicked");
@@ -133,10 +134,11 @@ $( document ).ready(function() {
 	$('#tweet-textarea').bind('input propertychange', function() {
 		numCharsTotal = parseInt($('#charsTotal').text())
 		numCharsInput = $('#tweet-textarea').val().length;
-		$('#charsLeft').text((numCharsTotal - numCharsInput).toString())
+		$('#charsLeft').text((numCharsTotal - numCharsInput).toString()) //HA-->somehow this gets refreshed back to updateNumCharsAllowed(numCharsUsed); every 5 seconds?
 	})
 	$("#send-tweet-button").click(function(){
 		text = $('#tweet-textarea').val();
+		console.log("clicked");
 		if (text.length > 0){
 			additional_hashtags = " #" + focused_thread + " #classtweeter"
 			if ($("#new-group-name").is(':visible')==true) {

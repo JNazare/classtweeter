@@ -9,7 +9,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>ClassTweeter</title>
+    <!--<title>ClassTweeter</title>-->
+    
 
     <!-- Bootstrap Core CSS -->
     <link href="../static/css/bootstrap.min.css" rel="stylesheet">
@@ -43,16 +44,19 @@
                 <div class="row">
                     <div class="col-md-12 col-sm-12">
                         <center>
+                            {% include 'header.html' %}
                             <h2 class="hashtagToTrack">
                             <span id="hashtagToTrack-js">
-                                #ClassTweeter
+                               
                             </span>
                             </h2>
                         </center>
                     </div>
                 </div>
                 <span id="tweetcard-js">
+                    
                     {% include 'tweetcard.html' %}
+                    
                 </span>
             </div>
         </div>
@@ -65,8 +69,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
+    <script src="../static/js/stream.js"></script>
     <script src="../static/js/bootstrap.min.js"></script>
     <script src="../static/js/newstream.js"></script>
+    
 
 </body>
 
