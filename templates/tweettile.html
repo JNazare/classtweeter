@@ -2,13 +2,13 @@
 <span class="author_{{group.is_author | lower}} tweet-tile" style="cursor: pointer;">
   {% if group.tweets[0].is_question %}
     <div id="{{group.hashtagString}}" class="thought-tile col-sm-4 col-md-4" style="background-color:#E0F8E0; height: 200px; overflow: scroll; margin-bottom: 15px;">
-    {% else %}
-      <div id="{{group.hashtagString}}" class="thought-tile col-sm-4 col-md-4" style="background-color:#fff; height: 200px; overflow: scroll; margin-bottom: 15px;" value="{{group.is_author}}">
-      {% endif %}
-      <span class="group-name"> <strong> {{group.hashtagString | hashtagToGroupname | capitalize}} </strong> </span>
+  {% else %}
+    <div id="{{group.hashtagString}}" class="thought-tile col-sm-4 col-md-4" style="background-color:#fff; height: 200px; overflow: scroll; margin-bottom: 15px;" value="{{group.is_author}}">
+  {% endif %}
+    <span class="group-name"> <strong> {{group.hashtagString | hashtagToGroupname | capitalize}} </strong> </span>
       {% if group.user_photos | length > 2 %}
         <button style="float:right; margin-top: -5px; margin-right: 2px;
-        margin-left: 2px;" type="button" class="btn btn-default btn-circle" disabled="true"><i class="glyphicon"></i>
+        margin-left: 2px;" type="button" class="btn btn-default btn-circle btn-sm" disabled="true"><i class="glyphicon"></i>
         <span id="focused-more-avatars">{{group.user_photos | length - 2}}+</span>
         </button>
       {% endif %}
@@ -27,7 +27,7 @@
         {{ group.tweets[0].text }}
       </p>
       {% if group.tweets | length - 1 > 0 %}
-        <span style="position: absolute; bottom: 0;"> <p style="color: #4099FF;"> {{group.tweets | length - 1}} more in this thread </p> </span>
+        <span style="position: absolute; bottom: 0;"> <p style="color: #4099FF;"> {{group.tweets | length - 1}} more thoughts in this thread </p> </span>
       {% endif %}
     </div>
   </span>
