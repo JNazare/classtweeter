@@ -56,7 +56,7 @@ function focusThread(hashtag){
 		}
 		sidebar = $('#sidebar');
 		// sidebar.scrollTop(sidebar.prop("scrollHeight"));
-		var numCharsUsed = 140-(" #" + hashtag + " #classtweeter").length;
+		var numCharsUsed = 140-(" #" + hashtag + " #tfivefifty").length;
 		updateNumCharsAllowed(numCharsUsed);
 	})
 }
@@ -90,6 +90,7 @@ $( document ).ready(function() {
 					$(this).addClass("thought-tile-selected");
 					hashtag = $(this).attr('id');
 					focusThread(hashtag);
+
 				});
 				console.log("refreshed tweets");
 			});
@@ -122,12 +123,12 @@ $( document ).ready(function() {
 		if ($("#new-group-name").is(':visible')==true) {
 			new_thread = true;
 			$("#"+ focused_thread).removeClass("thought-tile-selected");
-			updateNumCharsAllowed(106);
+			updateNumCharsAllowed(106); // ---- HA why 106?
 		}
 		else{
 			new_thread = false;
 			$("#"+ focused_thread).addClass("thought-tile-selected");
-			var numCharsUsed = 140-(" #" + focused_thread + " #classtweeter").length;
+			var numCharsUsed = 140-(" #" + focused_thread + " #tfivefifty").length;
 			updateNumCharsAllowed(numCharsUsed);
 		}
 	});
@@ -140,9 +141,9 @@ $( document ).ready(function() {
 		text = $('#tweet-textarea').val();
 		console.log("clicked");
 		if (text.length > 0){
-			additional_hashtags = " #" + focused_thread + " #classtweeter"
+			additional_hashtags = " #" + focused_thread + " #tfivefifty"
 			if ($("#new-group-name").is(':visible')==true) {
-				additional_hashtags = " #" + $("#new-group-name").val().toLowerCase().split(" ").join("_") + " #classtweeter";
+				additional_hashtags = " #" + $("#new-group-name").val().toLowerCase().split(" ").join("_") + " #tfivefifty";
 			}
 			composed_tweet = text + additional_hashtags;
 			$.post( "/sendToTwitter", composed_tweet, function(data){
@@ -155,7 +156,7 @@ $( document ).ready(function() {
 					$("#focusThread").toggle();
 					$("#newThread").toggle();
 					$("#"+focused_thread).addClass("thought-tile-selected");
-					var numCharsUsed = 140-(" #" + focused_thread + " #classtweeter").length;
+					var numCharsUsed = 140-(" #" + focused_thread + " #tfivefifty").length;
 					updateNumCharsAllowed(numCharsUsed);
 				}
 				setTimeout(function() { $("#send-tweet-button").removeClass("btn-sent").addClass("btn-unsent"); $("#send-tweet-button").text("Send");}, 3000)

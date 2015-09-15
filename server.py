@@ -15,7 +15,7 @@ from email.utils import parsedate_tz
 
 key_user = ''
 secret_user = ''
-tracked_hashtag = 'classtweeter'
+tracked_hashtag = 'tfivefifty'
 
 def to_datetime(datestring):
     time_tuple = parsedate_tz(datestring.strip())
@@ -162,7 +162,7 @@ def sortHashtagsinTweet(tweet):
     hashtagArray = tweet.get("hashtags", None)
     for hashtag in hashtagArray:
         tweet["text"] = tweet["text"].replace("#"+hashtag, "")
-    hashtagArray.remove(tracked_hashtag)
+    hashtagArray.remove('classtweeter')
     hashtagArray.sort()
     hashtagString = " ".join(hashtagArray)
     return [tweet, hashtagString]
