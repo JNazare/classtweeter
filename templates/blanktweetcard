@@ -1,0 +1,38 @@
+{% for row in groups|batch(3) %}
+	<div class="row">
+		
+			<div class="col-md-4 col-sm-4 tweet-tile">
+				<div id="{{group.hashtagString}}" class="col-md-12 col-sm-12 tweet-tile-interior">
+					<div class="row">
+						<div class="col-md-7 col-sm-7 hashtagString">
+		
+						</div>
+						<div class="col-md-5 col-sm-5">
+
+								<button class="btn btn-default btn-circle btn-sm extra-avatars" disabled="true">
+
+								</button>
+							
+								<img src="{{avatar}}" class="img-circle avatars" alt="Circular Image">
+							
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12 col-sm-12 tweet-text">
+							
+						</div>
+					</div>
+					
+					<div class="row">
+						<div class="col-md-12 col-sm-12">
+							<p class="more-thoughts">
+					
+							</p>
+						</div>
+					</div>
+					{% endif %}
+					<input type="hidden" value="{{group.raw_data}}">
+				</div>
+			</div>
+
+	</div>

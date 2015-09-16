@@ -33,7 +33,24 @@ $( document ).ready(function() {
 		});
 		
 	}, 5000);
+
+	$("#new-thread-button").click(function(){
+		$("#focusThread").toggle();
+		$("#newThread").toggle();
+		if ($("#new-group-name").is(':visible')==true) {
+			new_thread = true;
+			$("#"+ focused_thread).removeClass("thought-tile-selected");
+			updateNumCharsAllowed(106); // ---- HA why 106?
+		}
+		else{
+			new_thread = false;
+			$("#"+ focused_thread).addClass("thought-tile-selected");
+			var numCharsUsed = 140-(" #" + focused_thread + " #tfivefifty").length;
+			updateNumCharsAllowed(numCharsUsed);
+		}
+	});
 });
+
 
 
 
